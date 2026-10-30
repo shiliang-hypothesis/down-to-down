@@ -1,0 +1,102 @@
+[gd_scene format=3 uid="uid://wphvqg4mfdc0"]
+
+[ext_resource type="Script" uid="uid://dwbu3rfie7aff" path="res://meteor/meteor.gd" id="1_8o5vl"]
+[ext_resource type="Texture2D" uid="uid://svsxfxodogbm" path="res://resource/rocks.png" id="1_dyf3c"]
+[ext_resource type="Texture2D" uid="uid://l3q4lnv7op5q" path="res://meteor/light_gradient.tres" id="2_gt2qx"]
+[ext_resource type="Texture2D" uid="uid://dckvgo5brn57f" path="res://resource/glow.png" id="3_0bbng"]
+[ext_resource type="AudioStream" uid="uid://cpgxerphlfo6u" path="res://audio/meteor_whoosh.wav" id="4_whoosh"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_glow"]
+blend_mode = 1
+
+[sub_resource type="Gradient" id="Gradient_trail"]
+offsets = PackedFloat32Array(0, 0.4, 0.75, 1)
+colors = PackedColorArray(0.55, 0, 0, 0, 1, 0.3, 0, 0.5, 1, 0.75, 0.25, 0.95, 1, 1, 0.85, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dyf3c"]
+radius = 11.0
+
+[sub_resource type="Gradient" id="Gradient_0bbng"]
+offsets = PackedFloat32Array(0, 0.22826087, 0.5923913, 1)
+colors = PackedColorArray(1, 1, 0.6666667, 1, 1, 0.53333336, 0, 1, 0.26666668, 0.13333334, 0.13333334, 0.5882353, 0.13333334, 0.13333334, 0.13333334, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_8o5vl"]
+gradient = SubResource("Gradient_0bbng")
+
+[sub_resource type="Curve" id="Curve_0bbng"]
+_data = [Vector2(0, 0), 0.0, 0.041697334, 0, 0, Vector2(0.9954955, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_8o5vl"]
+curve = SubResource("Curve_0bbng")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_8o5vl"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 7.0
+direction = Vector3(0, -1, 0)
+spread = 18.0
+initial_velocity_min = 40.0
+initial_velocity_max = 120.0
+gravity = Vector3(0, -30, 0)
+damping_min = 2.0
+damping_max = 8.0
+scale_min = 0.25
+scale_max = 0.45
+scale_curve = SubResource("CurveTexture_8o5vl")
+color_ramp = SubResource("GradientTexture1D_8o5vl")
+turbulence_enabled = true
+turbulence_noise_strength = 10.0
+turbulence_noise_scale = 0.6
+
+[node name="Meteor" type="Area2D" unique_id=1552835582 groups=["meteor"]]
+monitoring = false
+script = ExtResource("1_8o5vl")
+
+[node name="Glow" type="Sprite2D" parent="." unique_id=331402517]
+modulate = Color(1, 0.55, 0.2, 0.9)
+material = SubResource("CanvasItemMaterial_glow")
+scale = Vector2(1.8, 1.8)
+texture = ExtResource("3_0bbng")
+
+[node name="Trail" type="Line2D" parent="." unique_id=1210590427]
+top_level = true
+z_index = -1
+material = SubResource("CanvasItemMaterial_glow")
+width = 18.0
+default_color = Color(1, 0.55, 0.2, 1)
+gradient = SubResource("Gradient_trail")
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=80214994]
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("1_dyf3c")
+hframes = 3
+vframes = 2
+frame = 4
+region_enabled = true
+region_rect = Rect2(0, 0, 72, 48)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2066985237]
+shape = SubResource("CircleShape2D_dyf3c")
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1929541204]
+color = Color(1, 0.33333334, 0, 1)
+energy = 1.5
+texture = ExtResource("2_gt2qx")
+texture_scale = 2.0
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=469447372]
+material = SubResource("CanvasItemMaterial_glow")
+amount = 56
+texture = ExtResource("3_0bbng")
+lifetime = 0.7
+visibility_rect = Rect2(-420, -420, 840, 840)
+process_material = SubResource("ParticleProcessMaterial_8o5vl")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1807147934]
+stream = ExtResource("4_whoosh")
+volume_db = -7.0
+max_distance = 4000.0

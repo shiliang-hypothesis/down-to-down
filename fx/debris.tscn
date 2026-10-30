@@ -1,0 +1,27 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://fx/debris.gd" id="1_debris"]
+[ext_resource type="Texture2D" uid="uid://svsxfxodogbm" path="res://resource/rocks.png" id="2_rocks"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_chunk"]
+radius = 4.0
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial2D_chunk"]
+friction = 0.7
+bounce = 0.3
+
+[node name="Debris" type="RigidBody2D"]
+collision_layer = 2
+collision_mask = 3
+physics_material_override = SubResource("PhysicsMaterial2D_chunk")
+mass = 0.6
+script = ExtResource("1_debris")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.55, 0.55)
+texture = ExtResource("2_rocks")
+hframes = 3
+vframes = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_chunk")
